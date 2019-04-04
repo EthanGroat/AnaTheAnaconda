@@ -9,7 +9,8 @@ class Item:
         if sprite:
             self.sprite = pg.image.load(sprite)
         else:
-            self.sprite = pg.Surface((16, 16))
+            self.sprite = pg.Surface((32, 32))
+            pg.draw.rect(self.sprite, (0, 255, 0), pg.Rect(4, 4, 24, 24), 4)
         self.rotated = self.sprite
         self.rect = self.rotated.get_rect(center=coordinates)
         self.center = list(coordinates)  # internal coordinates used to remap surface, takes floats
@@ -27,6 +28,7 @@ class Item:
     def translate_forward(self, distance):
         self.center[0] += -distance * math.sin(math.radians(self.rotation))  # sine takes radians, not degrees!
         self.center[1] += -distance * math.cos(math.radians(self.rotation))
+        self.rect.center = tuple(self.center)  # update pygame sprite placement
 
     def teleport(self, x, y, reset_rotation=False):
         """translates to an exact location"""

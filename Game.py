@@ -71,6 +71,7 @@ class Game:
             key = pg.key.get_pressed()
 
             # controls go here
+            self.translate_control(self.Head, key)
 
             self.snake.update()
 
@@ -81,6 +82,8 @@ class Game:
             self.clock.tick(48)  # Hobbit framerate
 
     #   -----------------------------------------------------------------------
+
+    # these guys could probably go into item and fleet, respectively
 
     def show(self, item):
         self.game_display.blit(item.rotated, item.rect)
@@ -172,10 +175,6 @@ class Game:
             item.smooth_translate(spot[0], spot[1])
 
     #   -----------------------------------------------------------------------
-
-#   modes for friction,
-#   boundary walls,
-#   automatic fly back into view
 
 
 if __name__ == "__main__":
