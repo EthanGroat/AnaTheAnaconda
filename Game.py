@@ -3,17 +3,6 @@
 from Item import *
 from Snake import *
 
-# color definition triplets
-black = (0, 0, 0)
-white = (255, 255, 255)
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-cyan = (0, 255, 255)
-yellow = (255, 255, 0)
-magenta = (255, 0, 255)
-violet = (128, 0, 144)
-
 
 def quit_app():
     pg.quit()
@@ -45,7 +34,7 @@ class Game:
         # self.fleet = Fleet([self.Toaster, self.HappyBread])
 
         self.snake = Snake()
-        self.Head = Item(game_handle=self, sprite=None, coordinates=(self.x_mid, self.y_mid))
+        self.Head = Segment(game_handle=self, coordinates=(self.x_mid, self.y_mid))
         self.snake.add(self.Head)
 
         self.mode = {'move': 'accelerate',
