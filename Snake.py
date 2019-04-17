@@ -3,14 +3,15 @@ from Item import *
 
 class Fleet:
 
-    def __init__(self, item_list=[]):
+    def __init__(self, game_handle=None, item_list=[]):
+        self.game_handle = game_handle
         self.items = item_list
 
     def update(self):
         for item in self.items:
             item.update()
 
-    def add(self, item):
+    def append(self, item):
         self.items.append(item)
 
     def show(self):
@@ -21,15 +22,14 @@ class Fleet:
 class Snake(Fleet):
 
     def __init__(self, game_handle, head_coordinates, length=4, separation=16):
-        super().__init__()
-        self.game_handle = game_handle
+        super().__init__(game_handle)
         self.Head = Segment(game_handle=game_handle, coordinates=head_coordinates)
         self.items.append(self.Head)
         self.separation = separation
         for segment in range(1, length):
-            self.items.append(Segment(game_handle,
-                                      color=green,
-                                      coordinates=head_coordinates))
+            self.append(Segment(game_handle,
+                                color=green,
+                                coordinates=head_coordinates))
         # 8 times the speed gives the 16 separation, so need 8 moves per segment
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
                                for i in range(int(length*separation/2))]
@@ -41,6 +41,9 @@ class Snake(Fleet):
             segment.queue_card(self.position_queue[index*8])
             index += 1
         self.position_queue.pop()
+        for food in self.game_handle.foods.items:
+            if self.Head.collides_with(food):
+                self.game_handle.foods.remove_into_belly(food)
         super().update()
 
     def push_head_position(self):
@@ -61,4 +64,15 @@ class Snake(Fleet):
         self.items[0].rotate(-rotation_speed)
         # self.push_head_position()
 
-    # more snake stuff
+
+class FoodCluster(Fleet):
+
+    def __init__(self, game_handle, foods=3):
+        self.game_handle = game_handle
+        self.items = []
+        for food in range(foods):
+            self.append(Food(game_handle))
+
+    def remove_into_belly(self, food_bit):
+        self.items.remove(food_bit)
+        self.append(Food(self.game_handle))  # add another food to screen

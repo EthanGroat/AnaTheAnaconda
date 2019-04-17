@@ -29,6 +29,7 @@ class Game:
 
         self.snake = Snake(game_handle=self,
                            head_coordinates=(self.x_mid, self.y_mid))
+        self.foods = FoodCluster(game_handle=self)
 
         self.mode = {'move': 'accelerate',
                      'sticky_rotate': False}
@@ -40,8 +41,6 @@ class Game:
     def game_loop(self):
 
         closed = False
-
-        print('Debug output:')
 
         while not closed:
 
@@ -57,10 +56,12 @@ class Game:
 
             # updates
             self.snake.update()
+            self.foods.update()
 
             # display buffer
             self.game_display.fill(black)
             self.snake.show()
+            self.foods.show()
 
             # display frame
             pg.display.update()
@@ -91,6 +92,8 @@ class Game:
 
 
 if __name__ == "__main__":
+
+    print('Debug output:')
     a = Game()
     a.game_loop()
     quit_app()

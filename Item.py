@@ -1,5 +1,6 @@
 import pygame as pg
 import math
+from random import *
 from Colors import *
 
 
@@ -9,6 +10,7 @@ class Item:
         self.game_handle = game_handle
         if sprite:
             self.sprite = pg.image.load(sprite)
+            print('Image load successful.')
         else:
             self.sprite = pg.Surface((32, 32), pg.SRCALPHA)
             pg.draw.rect(self.sprite, color, pg.Rect(4, 4, 24, 14), 4)
@@ -144,6 +146,14 @@ class AcceleratingItem(Item):
             if abs(self.omega) < 0.003:
                 self.omega = 0
             print(self.omega)
+
+
+class Food(AcceleratingItem):
+
+    def __init__(self, game_handle):
+        super().__init__(game_handle, sprite="resources/bluefood.png", width=9)
+        # rand = random()
+        self.teleport(randint(0, game_handle.display_width), randint(0, game_handle.display_height))
 
 
 # class NewtonianItem(AcceleratingItem):
