@@ -60,7 +60,7 @@ class Game:
             key = pg.key.get_pressed()
 
             # controls go here
-            self.translate_control(self.Head, key)
+            self.control(self.Head, key)
 
             self.snake.update()
 
@@ -84,84 +84,23 @@ class Game:
     #   -----------------------------------------------------------------------
 
     @staticmethod
-    def translate_control(item, key,
-                          translation_sensitivity=10,
-                          rotation_sensitivity=6.4):
-        # these controls give the bread (or any item) up/down and tumble left/right motion
-        # ground_axis = self.display_height - item.sprite.get_rect().height / 2
-        if key[pg.K_w]:
-            item.translate(0, -translation_sensitivity)
-        if key[pg.K_a]:
-            item.rotate(rotation_sensitivity)
-            item.translate(-translation_sensitivity, 0)
-        if key[pg.K_s]:
-            # if item.center[1] < ground_axis:
-            item.translate(0, translation_sensitivity)
-        if key[pg.K_d]:
-            item.rotate(-rotation_sensitivity)
-            item.translate(translation_sensitivity, 0)
+    def control(item, key,
+                forward_speed=2.4,
+                rotation_sensitivity=5):
+
+        s = forward_speed
+
         if key[pg.K_UP]:
-            item.translate_forward(translation_sensitivity)
+            item.translate_forward(s*2)
+        elif key[pg.K_DOWN]:
+            item.translate_forward(s*0.5)
+        else:
+            item.translate_forward(s)
+
         if key[pg.K_LEFT]:
             item.rotate(rotation_sensitivity)
-        if key[pg.K_DOWN]:
-            item.translate_forward(-translation_sensitivity)
         if key[pg.K_RIGHT]:
             item.rotate(-rotation_sensitivity)
-
-        # mouse controls
-        if pg.mouse.get_pressed()[0]:
-            spot = pg.mouse.get_pos()
-            print(spot)
-            item.teleport(spot[0], spot[1])
-            item.rotate(item.omega)
-            # silly rotation, press freeze to stop it
-
-    def accelerate_control(self, item, key,
-                           accelerate_sensitivity=0.38,
-                           rotational_accelerate_sensitivity=0.5,
-                           target_rotation=8):
-        # these controls give the item smooth wasd acceleration controls and left/right rotational acceleration
-
-        # keyboard controls
-        # -----------------
-        # non-relative up, down, left, right:
-        if key[pg.K_w]:
-            item.accelerate(0, -accelerate_sensitivity)
-        if key[pg.K_a]:
-            item.accelerate(-accelerate_sensitivity, 0)
-        if key[pg.K_s]:
-            item.accelerate(0, accelerate_sensitivity)
-        if key[pg.K_d]:
-            item.accelerate(accelerate_sensitivity, 0)
-        # angular acceleration:
-        if key[pg.K_q] or key[pg.K_u]:
-            item.accelerate(0, 0, rotational_accelerate_sensitivity)
-            self.mode['sticky_rotate'] = False
-        if key[pg.K_e] or key[pg.K_o]:
-            item.accelerate(0, 0, -rotational_accelerate_sensitivity)
-            self.mode['sticky_rotate'] = False
-        # relative forward, backward:
-        if key[pg.K_i] or key[pg.K_UP]:
-            item.accelerate_forward(accelerate_sensitivity)
-        if key[pg.K_k] or key[pg.K_DOWN]:
-            item.accelerate_forward(-accelerate_sensitivity)
-        # sticky (non-accelerating) rotation:
-        if key[pg.K_LEFT] or key[pg.K_j]:
-            item.smooth_rotate(target_rotation, sensitivity=16)
-            self.mode['sticky_rotate'] = True
-        if key[pg.K_RIGHT] or key[pg.K_l]:
-            item.smooth_rotate(-target_rotation, sensitivity=16)
-            self.mode['sticky_rotate'] = True
-        # reset rotation smoothly back to zero:
-        if self.mode['sticky_rotate']:
-            if not (key[pg.K_LEFT] or key[pg.K_j] or key[pg.K_RIGHT] or key[pg.K_l]):
-                item.smooth_rotate(0, sensitivity=30)
-
-        # mouse controls
-        if pg.mouse.get_pressed()[0]:
-            spot = pg.mouse.get_pos()
-            item.smooth_translate(spot[0], spot[1])
 
     #   -----------------------------------------------------------------------
 

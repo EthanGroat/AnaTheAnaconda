@@ -40,9 +40,10 @@ class Item:
             self.rotate(-self.rotation)
 
     def rotate(self, degrees):
-        self.rotation += degrees
-        self.rotated = pg.transform.rotate(self.sprite, self.rotation)
-        self.rect = self.rotated.get_rect(center=self.center)  # working! :D
+        if self.sprite:
+            self.rotation += degrees
+            self.rotated = pg.transform.rotate(self.sprite, self.rotation)
+            self.rect = self.rotated.get_rect(center=self.center)
 
     def update(self):
         # this function is here to generalize the update idea to all Items
