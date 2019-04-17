@@ -29,7 +29,7 @@ class Game:
         self.y_mid = self.screen_surf.get_rect().centery
 
         self.snake = Snake(game_handle=self,
-                           head_coordinates=(self.x_mid, self.y_mid))
+                           head_coordinates=(self.x_mid, self.y_mid, 0))
         self.foods = FoodCluster(game_handle=self)
 
         self.mode = {'move': 'accelerate',

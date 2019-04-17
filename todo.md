@@ -12,12 +12,13 @@
         points in time
 ---
 #### getting there
-* add mechanism for segment growth & food
-* apply collisions of food to head (eating)
+* add mechanism for segment growth & food ✓
+* apply collisions of food to head (eating) ✓
 * apply collisions against self (death)
 ---
 #### fun gameplay
-* add collisions with edge of screen
+* add collisions with edge of screen or 
+    wraparound
 * add moving, bouncing food particles with 
     collisions of body against food
 * display score and implement a high score 

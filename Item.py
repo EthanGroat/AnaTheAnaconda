@@ -69,12 +69,18 @@ class Item:
 
 class Segment(Item):
 
-    def __init__(self, game_handle, color=green, coordinates=(0, 0), width=26):
-        super().__init__(game_handle, None, coordinates, width, color)
+    def __init__(self, game_handle, color=green, tricoordinates=(0, 0, 0), width=26):
+        super().__init__(game_handle, sprite=None,
+                         coordinates=(tricoordinates[0], tricoordinates[1]),
+                         width=width, color=color)
+        self.rotate(tricoordinates[2])
 
-    def queue_card(self, coordinates=(0, 0, 0)):  # third coordinate is rotation
-        self.teleport(coordinates[0], coordinates[1], reset_rotation=True)
-        self.rotate(coordinates[2])
+    def get_tricoordinates(self):
+        return self.center[0], self.center[1], self.rotation
+
+    def queue_card(self, tricoordinates=(0, 0, 0)):  # third coordinate is rotation
+        self.teleport(tricoordinates[0], tricoordinates[1], reset_rotation=True)
+        self.rotate(tricoordinates[2])
 
 
 class AcceleratingItem(Item):

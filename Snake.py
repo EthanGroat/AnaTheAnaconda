@@ -26,7 +26,7 @@ class Snake(Fleet):
         self.separation = separation
         self.items = [Segment(game_handle,
                       color=green,
-                      coordinates=head_coordinates) for i in range(length)]
+                      tricoordinates=head_coordinates) for i in range(length)]
         self.Head = self.items[0]
         # 8 times the speed gives the 16 separation, so need 8 moves per segment
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
@@ -39,14 +39,22 @@ class Snake(Fleet):
         self.position_queue.pop()
         for food in self.game_handle.foods.items:
             if self.Head.collides_with(food):
-                self.game_handle.foods.remove_into_belly(food)
+                # self.game_handle.foods.remove_into_belly(food)
+                self.eat(food)
         super().update()
 
     def push_head_position(self):
-        new_coordinate = (self.items[0].center[0],
-                          self.items[0].center[1],
-                          self.items[0].rotation)
+        new_coordinate = (self.Head.center[0],
+                          self.Head.center[1],
+                          self.Head.rotation)
         self.position_queue.insert(0, new_coordinate)
+
+    def eat(self, food):
+        self.game_handle.foods.remove_into_belly(food)
+        self.append(Segment(self.game_handle,
+                            tricoordinates=self.items[-1].get_tricoordinates()))
+        for i in range(8):
+            self.position_queue.append(self.items[-1].get_tricoordinates())
 
     def forward(self, speed=2):
         self.items[0].translate_forward(speed)
