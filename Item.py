@@ -10,8 +10,9 @@ class Item:
         if sprite:
             self.sprite = pg.image.load(sprite)
         else:
-            self.sprite = pg.Surface((28, 28))
-            pg.draw.rect(self.sprite, color, pg.Rect(4, 4, 24, 24), 4)
+            self.sprite = pg.Surface((32, 32), pg.SRCALPHA)
+            pg.draw.rect(self.sprite, color, pg.Rect(4, 4, 24, 14), 4)
+
         self.rotated = self.sprite
         self.rect = self.rotated.get_rect(center=coordinates)
         self.center = list(coordinates)  # internal coordinates used to remap surface, takes lists of floats

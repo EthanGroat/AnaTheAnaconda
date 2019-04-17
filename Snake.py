@@ -36,6 +36,7 @@ class Snake(Fleet):
                                for i in range(int(length*separation/2))]
 
     def update(self):
+        self.push_head_position()
         index = 0
         for segment in self.items:
             segment.queue_card(self.position_queue[index*8])
@@ -51,14 +52,14 @@ class Snake(Fleet):
 
     def forward(self, speed=2):
         self.items[0].translate_forward(speed)
-        self.push_head_position()
+        # self.push_head_position()
 
     def left(self, rotation_speed):
         self.items[0].rotate(rotation_speed)
-        self.push_head_position()
+        # self.push_head_position()
 
     def right(self, rotation_speed):
         self.items[0].rotate(-rotation_speed)
-        self.push_head_position()
+        # self.push_head_position()
 
     # more snake stuff
