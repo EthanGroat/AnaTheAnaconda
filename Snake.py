@@ -13,13 +13,17 @@ class Fleet:
     def add(self, item):
         self.items.append(item)
 
+    def show(self):
+        for item in self.items:
+            item.show()
+
 
 class Snake(Fleet):
 
     def __init__(self, game_handle, head_coordinates, length=4):
         super().__init__()
         self.game_handle = game_handle
-        self.Head = Segment(game_handle=self, coordinates=head_coordinates)
+        self.Head = Segment(game_handle=game_handle, coordinates=head_coordinates)
         self.items.append(self.Head)
         # for segment in range(length):
         #     self.items.add(Segment(self, (head_coordinates[0], head_coordinates[1]+16)))

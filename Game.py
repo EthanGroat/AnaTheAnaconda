@@ -63,21 +63,10 @@ class Game:
             self.snake.update()
 
             self.game_display.fill(black)
-            self.show_all_items()
+            self.snake.show()
 
             pg.display.update()
             self.clock.tick(48)  # Hobbit framerate
-
-    #   -----------------------------------------------------------------------
-
-    # these guys could probably go into item and fleet, respectively
-
-    def show(self, item):
-        self.game_display.blit(item.rotated, item.rect)
-
-    def show_all_items(self):
-        for item in self.snake.items:
-            self.show(item)
 
     #   -----------------------------------------------------------------------
 

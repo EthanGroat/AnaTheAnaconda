@@ -49,6 +49,9 @@ class Item:
         # this function is here to generalize the update idea to all Items
         pass
 
+    def show(self):
+        self.game_handle.game_display.blit(self.rotated, self.rect)
+
     def center_to_string(self):
         return "({:.1f}, {:.1f})".format(self.center[0], self.center[1])
 
