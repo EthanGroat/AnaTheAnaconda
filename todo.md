@@ -1,13 +1,15 @@
 ### to-do:
 
 ---
-#### basic
-* add segments
-* check that segments display correctly
-* add the mechanism for snake movement
-    * sort of a queue
-    * every segment follows the same moveset 
-        as the head in turn
+#### basic ✓
+* add segments ✓
+* check that segments display correctly ✓
+* add the mechanism for snake movement ✓
+    * queue of positions with different 
+        access points for different segments
+    * every segment follows the same position 
+        stream as the head at different 
+        points in time
 ---
 #### getting there
 * add mechanism for segment growth & food
