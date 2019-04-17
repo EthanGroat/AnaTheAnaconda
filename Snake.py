@@ -29,8 +29,7 @@ class Snake(Fleet):
         for segment in range(1, length):
             self.items.append(Segment(game_handle,
                                       color=green,
-                                      coordinates=(head_coordinates[0],
-                                                   head_coordinates[1] + separation*segment)))
+                                      coordinates=head_coordinates))
         # 8 times the speed gives the 16 separation, so need 8 moves per segment
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
                                for i in range(int(length*separation/2))]

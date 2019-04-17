@@ -69,23 +69,23 @@ class Game:
     #   -----------------------------------------------------------------------
 
     @staticmethod
-    def control(item, key,
+    def control(snake, key,
                 forward_speed=2,
                 rotation_sensitivity=5):
 
         s = forward_speed
 
         if key[pg.K_UP]:
-            item.forward(s*2)
+            snake.forward(s * 2)
         elif key[pg.K_DOWN]:
-            item.forward(s*0.5)
+            snake.forward(s * 0.5)
         else:
-            item.forward(s)
+            snake.forward(s)
 
         if key[pg.K_LEFT]:
-            item.left(rotation_sensitivity)
+            snake.left(rotation_sensitivity)
         if key[pg.K_RIGHT]:
-            item.right(rotation_sensitivity)
+            snake.right(rotation_sensitivity)
 
     #   -----------------------------------------------------------------------
 
