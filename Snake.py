@@ -31,29 +31,34 @@ class Snake(Fleet):
                                       color=green,
                                       coordinates=(head_coordinates[0],
                                                    head_coordinates[1] + separation*segment)))
-        # 8 times the speed gives the 16 separation, so need that many moves per segment to track the next segment
-        self.move_queue = ['u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2',
-                           'u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2',
-                           'u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2', 'u2',
-                           'u2']
+        # 8 times the speed gives the 16 separation, so need 8 moves per segment
+        self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
+                               for i in range(int(length*separation/2))]
 
     def update(self):
         index = 0
         for segment in self.items:
-            segment.queue_card(self.move_queue[index*8])
+            segment.queue_card(self.position_queue[index*8])
             index += 1
-        self.move_queue.pop()
+        self.position_queue.pop()
+        super().update()
+
+    def push_head_position(self):
+        new_coordinate = (self.items[0].center[0],
+                          self.items[0].center[1],
+                          self.items[0].rotation)
+        self.position_queue.insert(0, new_coordinate)
 
     def forward(self, speed=2):
-        # self.items[0].translate_forward(speed)
-        self.move_queue.insert(0, 'u2')
+        self.items[0].translate_forward(speed)
+        self.push_head_position()
 
     def left(self, rotation_speed):
-        # self.items[0].rotate(rotation_speed)
-        self.move_queue.insert(0, 'l5')
+        self.items[0].rotate(rotation_speed)
+        self.push_head_position()
 
     def right(self, rotation_speed):
-        # self.items[0].rotate(-rotation_speed)
-        self.move_queue.insert(0, 'r5')
+        self.items[0].rotate(-rotation_speed)
+        self.push_head_position()
 
     # more snake stuff

@@ -10,11 +10,11 @@ class Item:
         if sprite:
             self.sprite = pg.image.load(sprite)
         else:
-            self.sprite = pg.Surface((32, 32))
+            self.sprite = pg.Surface((28, 28))
             pg.draw.rect(self.sprite, color, pg.Rect(4, 4, 24, 24), 4)
         self.rotated = self.sprite
         self.rect = self.rotated.get_rect(center=coordinates)
-        self.center = list(coordinates)  # internal coordinates used to remap surface, takes floats
+        self.center = list(coordinates)  # internal coordinates used to remap surface, takes lists of floats
         self.rotation = 0.0  # in degrees
         self.radius = width / 2
         # this is a rectangle used as a proxy for re-centering and blitting the sprite to the right location
@@ -69,15 +69,9 @@ class Segment(Item):
     def __init__(self, game_handle, color=green, coordinates=(0, 0), width=26):
         super().__init__(game_handle, None, coordinates, width, color)
 
-    def queue_card(self, string):
-        if string == 'u2':
-            self.translate_forward(2)
-        if string == 'l5':
-            self.rotate(5)
-            self.translate_forward(2)
-        if string == 'r5':
-            self.rotate(-5)
-            self.translate_forward(2)
+    def queue_card(self, coordinates=(0, 0, 0)):  # third coordinate is rotation
+        self.teleport(coordinates[0], coordinates[1], reset_rotation=True)
+        self.rotate(coordinates[2])
 
 
 class AcceleratingItem(Item):
@@ -174,7 +168,7 @@ class AcceleratingItem(Item):
 #         self.velocity[1] += y_extra + self.netForces[1]/self.mass
 #         self.omega += angular_acceleration
 #
-#     # this is the class where update() becomes important
+#     # this is the class where update() becomes really important
 #     def update(self, x_force=0.0, y_force=0.0, angular_acc=0.0):
 #         # takes the x and y components of an applied force as arguments
 #         # (optional as update() can be called after any number of calls of apply_force() in the game loop)
