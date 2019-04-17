@@ -23,23 +23,19 @@ class Snake(Fleet):
 
     def __init__(self, game_handle, head_coordinates, length=4, separation=16):
         super().__init__(game_handle)
-        self.Head = Segment(game_handle=game_handle, coordinates=head_coordinates)
-        self.items.append(self.Head)
         self.separation = separation
-        for segment in range(1, length):
-            self.append(Segment(game_handle,
-                                color=green,
-                                coordinates=head_coordinates))
+        self.items = [Segment(game_handle,
+                      color=green,
+                      coordinates=head_coordinates) for i in range(length)]
+        self.Head = self.items[0]
         # 8 times the speed gives the 16 separation, so need 8 moves per segment
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
                                for i in range(int(length*separation/2))]
 
     def update(self):
         self.push_head_position()
-        index = 0
-        for segment in self.items:
+        for index, segment in enumerate(self.items):
             segment.queue_card(self.position_queue[index*8])
-            index += 1
         self.position_queue.pop()
         for food in self.game_handle.foods.items:
             if self.Head.collides_with(food):

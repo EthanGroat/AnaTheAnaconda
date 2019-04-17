@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # import pygame as pg  # not needed because it is imported in Item.py
 
 from Item import *
