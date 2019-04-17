@@ -17,7 +17,8 @@ class Game:
         self.display_width = 1200
         self.display_height = 600
 
-        self.game_display = pg.display.set_mode((self.display_width, self.display_height))
+        self.game_display = pg.display.set_mode((self.display_width,
+                                                 self.display_height))
         pg.display.set_caption('Yeah Toast!')
 
         self.clock = pg.time.Clock()
@@ -26,14 +27,8 @@ class Game:
         self.x_mid = self.screen_surf.get_rect().centerx
         self.y_mid = self.screen_surf.get_rect().centery
 
-        # item declarations
-        # self.HappyBread = NewtonianItem(game_handle=self, sprite='resources/HappyBread_wT.png',
-        #                                 coordinates=(self.x_mid, self.y_mid))
-        # self.Toaster = Item(game_handle=self, sprite='resources/Toaster.png',
-        #                     coordinates=(256, 288))
-        # self.fleet = Fleet([self.Toaster, self.HappyBread])
-
-        self.snake = Snake(game_handle=self, head_coordinates=(self.x_mid, self.y_mid))
+        self.snake = Snake(game_handle=self,
+                           head_coordinates=(self.x_mid, self.y_mid))
 
         self.mode = {'move': 'accelerate',
                      'sticky_rotate': False}
@@ -50,21 +45,24 @@ class Game:
 
         while not closed:
 
+            # check for close
             events = pg.event.get()
             for event in events:
                 if event.type == pg.QUIT:
                     closed = True
 
+            # inputs
             key = pg.key.get_pressed()
-
-            # controls go here
             self.control(self.snake, key)
 
+            # updates
             self.snake.update()
 
+            # display buffer
             self.game_display.fill(black)
             self.snake.show()
 
+            # display frame
             pg.display.update()
             self.clock.tick(48)  # Hobbit framerate
 
@@ -72,7 +70,7 @@ class Game:
 
     @staticmethod
     def control(item, key,
-                forward_speed=2.4,
+                forward_speed=2,
                 rotation_sensitivity=5):
 
         s = forward_speed

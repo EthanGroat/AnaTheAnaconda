@@ -40,10 +40,9 @@ class Item:
             self.rotate(-self.rotation)
 
     def rotate(self, degrees):
-        if self.sprite:
-            self.rotation += degrees
-            self.rotated = pg.transform.rotate(self.sprite, self.rotation)
-            self.rect = self.rotated.get_rect(center=self.center)
+        self.rotation += degrees
+        self.rotated = pg.transform.rotate(self.sprite, self.rotation)
+        self.rect = self.rotated.get_rect(center=self.center)
 
     def update(self):
         # this function is here to generalize the update idea to all Items
@@ -69,6 +68,16 @@ class Segment(Item):
 
     def __init__(self, game_handle, color=green, coordinates=(0, 0), width=26):
         super().__init__(game_handle, None, coordinates, width, color)
+
+    def queue_card(self, string):
+        if string == 'u2':
+            self.translate_forward(2)
+        if string == 'l5':
+            self.rotate(5)
+            self.translate_forward(2)
+        if string == 'r5':
+            self.rotate(-5)
+            self.translate_forward(2)
 
 
 class AcceleratingItem(Item):
