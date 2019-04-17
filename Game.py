@@ -33,9 +33,7 @@ class Game:
         #                     coordinates=(256, 288))
         # self.fleet = Fleet([self.Toaster, self.HappyBread])
 
-        self.snake = Snake()
-        self.Head = Segment(game_handle=self, coordinates=(self.x_mid, self.y_mid))
-        self.snake.add(self.Head)
+        self.snake = Snake(game_handle=self, head_coordinates=(self.x_mid, self.y_mid))
 
         self.mode = {'move': 'accelerate',
                      'sticky_rotate': False}
@@ -60,7 +58,7 @@ class Game:
             key = pg.key.get_pressed()
 
             # controls go here
-            self.control(self.Head, key)
+            self.control(self.snake, key)
 
             self.snake.update()
 
@@ -91,16 +89,16 @@ class Game:
         s = forward_speed
 
         if key[pg.K_UP]:
-            item.translate_forward(s*2)
+            item.forward(s*2)
         elif key[pg.K_DOWN]:
-            item.translate_forward(s*0.5)
+            item.forward(s*0.5)
         else:
-            item.translate_forward(s)
+            item.forward(s)
 
         if key[pg.K_LEFT]:
-            item.rotate(rotation_sensitivity)
+            item.left(rotation_sensitivity)
         if key[pg.K_RIGHT]:
-            item.rotate(-rotation_sensitivity)
+            item.right(rotation_sensitivity)
 
     #   -----------------------------------------------------------------------
 
