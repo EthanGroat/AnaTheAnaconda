@@ -21,26 +21,32 @@ class Fleet:
 
 class Snake(Fleet):
 
-    def __init__(self, game_handle, head_coordinates, length=4, separation=16):
+    def __init__(self, game_handle, head_coordinates, speed=2, rotation_speed=5, length=4, separation=16):
         super().__init__(game_handle)
+        self.speed = speed
+        self.rotation_speed = rotation_speed
         self.separation = separation
         self.items = [Segment(game_handle,
                       color=green,
-                      tricoordinates=head_coordinates) for i in range(length)]
+                      tricoordinates=head_coordinates) for i in range(length)]  # populates the snake segments
         self.Head = self.items[0]
-        # 8 times the speed gives the 16 separation, so need 8 moves per segment
+
+        # load starting position frame stream in queue, interpolating between segment positions for each frame:
+        self.frames_per_segment = int(separation/speed)
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
-                               for i in range(int(length*separation/2))]
+                               for i in range(int(length*self.frames_per_segment))]
+        self.boost_multiplier = 1
 
     def update(self):
-        self.push_head_position()
-        for index, segment in enumerate(self.items):
-            segment.queue_card(self.position_queue[index*8])
-        self.position_queue.pop()
-        for food in self.game_handle.foods.items:
-            if self.Head.collides_with(food):
-                # self.game_handle.foods.remove_into_belly(food)
-                self.eat(food)
+        for i in range(self.boost_multiplier):
+            self.Head.translate_forward(self.speed)
+            self.push_head_position()
+            for index, segment in enumerate(self.items):
+                segment.queue_card(self.position_queue[index*self.frames_per_segment])  # different positions in the stream
+            self.position_queue.pop()
+            for food in self.game_handle.foods.items:
+                if self.Head.collides_with(food):
+                    self.eat(food)
         super().update()
 
     def push_head_position(self):
@@ -53,27 +59,23 @@ class Snake(Fleet):
         self.game_handle.foods.remove_into_belly(food)
         self.append(Segment(self.game_handle,
                             tricoordinates=self.items[-1].get_tricoordinates()))
-        for i in range(8):
+        for i in range(self.frames_per_segment):
             self.position_queue.append(self.items[-1].get_tricoordinates())
 
-    def forward(self, speed=2):
-        self.items[0].translate_forward(speed)
-        # self.push_head_position()
+    def forward(self, boost_multiplier=1):
+        self.boost_multiplier = int(boost_multiplier)
 
-    def left(self, rotation_speed):
-        self.items[0].rotate(rotation_speed)
-        # self.push_head_position()
+    def left(self):
+        self.items[0].rotate(self.rotation_speed)
 
-    def right(self, rotation_speed):
-        self.items[0].rotate(-rotation_speed)
-        # self.push_head_position()
+    def right(self):
+        self.items[0].rotate(-self.rotation_speed)
 
 
 class FoodCluster(Fleet):
 
     def __init__(self, game_handle, foods=3):
-        self.game_handle = game_handle
-        self.items = []
+        super().__init__(game_handle)
         for food in range(foods):
             self.append(Food(game_handle))
 

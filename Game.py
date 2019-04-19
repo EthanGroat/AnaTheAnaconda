@@ -29,8 +29,9 @@ class Game:
         self.y_mid = self.screen_surf.get_rect().centery
 
         self.snake = Snake(game_handle=self,
-                           head_coordinates=(self.x_mid, self.y_mid, 0))
-        self.foods = FoodCluster(game_handle=self)
+                           head_coordinates=(self.x_mid, self.y_mid, 0),
+                           speed=3)
+        self.foods = FoodCluster(game_handle=self, foods=5)
 
         self.mode = {'move': 'accelerate',
                      'sticky_rotate': False}
@@ -71,23 +72,19 @@ class Game:
     #   -----------------------------------------------------------------------
 
     @staticmethod
-    def control(snake, key,
-                forward_speed=2,
-                rotation_sensitivity=5):
-
-        s = forward_speed
-
-        if key[pg.K_UP]:
-            snake.forward(s * 2)
-        elif key[pg.K_DOWN]:
-            snake.forward(s * 0.5)
-        else:
-            snake.forward(s)
+    def control(snake, key):
 
         if key[pg.K_LEFT]:
-            snake.left(rotation_sensitivity)
+            snake.left()
         if key[pg.K_RIGHT]:
-            snake.right(rotation_sensitivity)
+            snake.right()
+
+        if key[pg.K_UP]:
+            snake.forward(2)
+        elif key[pg.K_DOWN]:
+            snake.forward()
+        else:
+            snake.forward()
 
     #   -----------------------------------------------------------------------
 

@@ -8,9 +8,12 @@ class Item:
 
     def __init__(self, game_handle, sprite=None, coordinates=(0, 0), width=250.0, color=green):
         self.game_handle = game_handle
-        if sprite:
-            self.sprite = pg.image.load(sprite)
-            print('Image load successful.')
+        if sprite:  # comprehensive sprite handling
+            if type(sprite) is str:
+                self.sprite = pg.image.load(sprite)
+                print('Image load successful.')
+            elif isinstance(sprite, pg.Surface):  # for pre-loaded sprites
+                self.sprite = sprite
         else:
             self.sprite = pg.Surface((32, 32), pg.SRCALPHA)
             pg.draw.rect(self.sprite, color, pg.Rect(4, 4, 24, 14), 4)
