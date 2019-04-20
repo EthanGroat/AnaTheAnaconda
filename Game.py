@@ -15,12 +15,13 @@ class Game:
     def __init__(self):
         pg.init()
 
+        # display:
         self.display_width = 1200
         self.display_height = 600
 
         self.game_display = pg.display.set_mode((self.display_width,
                                                  self.display_height))
-        pg.display.set_caption('Yeah Toast!')
+        pg.display.set_caption('Anaconda')
 
         self.clock = pg.time.Clock()
 
@@ -28,15 +29,16 @@ class Game:
         self.x_mid = self.screen_surf.get_rect().centerx
         self.y_mid = self.screen_surf.get_rect().centery
 
+        # items:
         self.snake = Snake(game_handle=self,
                            head_coordinates=(self.x_mid, self.y_mid, 0),
-                           speed=3)
+                           speed=2)
+
         self.foods = FoodCluster(game_handle=self, foods=5)
 
-        self.mode = {'move': 'accelerate',
-                     'sticky_rotate': False}
-
-        # self.events = []
+        # modes, etc:
+        # self.mode = {'move': 'accelerate',
+        #              'sticky_rotate': False}
 
     #   -----------------------------------------------------------------------
 
@@ -74,17 +76,19 @@ class Game:
     @staticmethod
     def control(snake, key):
 
+        default_boost = 2
+
         if key[pg.K_LEFT]:
             snake.left()
         if key[pg.K_RIGHT]:
             snake.right()
 
         if key[pg.K_UP]:
-            snake.forward(2)
+            snake.forward(default_boost*2)
         elif key[pg.K_DOWN]:
-            snake.forward()
+            snake.forward(default_boost/2)
         else:
-            snake.forward()
+            snake.forward(default_boost)
 
     #   -----------------------------------------------------------------------
 

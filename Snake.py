@@ -21,7 +21,7 @@ class Fleet:
 
 class Snake(Fleet):
 
-    def __init__(self, game_handle, head_coordinates, speed=2, rotation_speed=5, length=4, separation=16):
+    def __init__(self, game_handle, head_coordinates, speed=2, rotation_speed=6, length=4, separation=16):
         super().__init__(game_handle)
         self.speed = speed
         self.rotation_speed = rotation_speed
@@ -55,14 +55,9 @@ class Snake(Fleet):
                           self.Head.rotation)
         self.position_queue.insert(0, new_coordinate)
 
-    def eat(self, food):
-        self.game_handle.foods.remove_into_belly(food)
-        self.append(Segment(self.game_handle,
-                            tricoordinates=self.items[-1].get_tricoordinates()))
-        for i in range(self.frames_per_segment):
-            self.position_queue.append(self.items[-1].get_tricoordinates())
-
-    def forward(self, boost_multiplier=1):
+    def forward(self, boost_multiplier=2):
+        # boost_multiplier is the multiplier for update iterations per frame,
+        # and as such it also speeds up the snake
         self.boost_multiplier = int(boost_multiplier)
 
     def left(self):
@@ -70,6 +65,14 @@ class Snake(Fleet):
 
     def right(self):
         self.items[0].rotate(-self.rotation_speed)
+        # Note: rotate is not included in update(), so faster boost will not also boost effective rotation speed
+
+    def eat(self, food):
+        self.game_handle.foods.remove_into_belly(food)
+        self.append(Segment(self.game_handle,
+                            tricoordinates=self.items[-1].get_tricoordinates()))
+        for i in range(self.frames_per_segment):
+            self.position_queue.append(self.items[-1].get_tricoordinates())
 
 
 class FoodCluster(Fleet):
