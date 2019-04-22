@@ -8,6 +8,7 @@ Copyright © Ethan Groat 2019
   * Ana the Anaconda (green) 🐍
   * Caspian Cobra (grey or striped)
   * Corey the Cape Cobra (yellow)
+  * Carrie Cornsnake
   * Dixie the Diamond Python
   * Garry Grass Snake
   * Merida the Magnificent Ball Python
