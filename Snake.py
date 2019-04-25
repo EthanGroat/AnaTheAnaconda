@@ -38,12 +38,17 @@ class Snake(Fleet):
         self.boost_multiplier = 1
 
     def update(self):
-        for i in range(self.boost_multiplier):
+        for i in range(self.boost_multiplier): # do this part as many times as the multiplier
+            # move head:
             self.Head.translate_forward(self.speed)
+            # add head position to stream of positions for the body to follow:
             self.push_head_position()
+            # different segments access different positions in the stream of positions:
             for index, segment in enumerate(self.items):
-                segment.queue_card(self.position_queue[index*self.frames_per_segment])  # different positions in the stream
+                segment.queue_card(self.position_queue[index*self.frames_per_segment])
+            # remove unnecessary positions at the end of the list:
             self.position_queue.pop()
+            # food/growth handling:
             for food in self.game_handle.foods.items:
                 if self.Head.collides_with(food):
                     self.eat(food)
