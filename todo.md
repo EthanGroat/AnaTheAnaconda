@@ -46,6 +46,6 @@
         * snakes have cute doodles next to 
             their names
     * view high scores
-* create executable file
-* release??
+* create executable file using PyInstaller
+* release
 ---
