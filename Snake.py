@@ -18,6 +18,10 @@ class Fleet:
         for item in self.items:
             item.show()
 
+    def remove(self, item):
+        self.items.remove(item)
+        # del item
+
 
 class Snake(Fleet):
 
@@ -36,22 +40,37 @@ class Snake(Fleet):
         self.position_queue = [(head_coordinates[0], head_coordinates[1]+i, 0)
                                for i in range(int(length*self.frames_per_segment))]
         self.boost_multiplier = 1
+        self.is_alive = True
 
     def update(self):
-        for i in range(self.boost_multiplier): # do this part as many times as the multiplier
-            # move head:
-            self.Head.translate_forward(self.speed)
-            # add head position to stream of positions for the body to follow:
-            self.push_head_position()
-            # different segments access different positions in the stream of positions:
-            for index, segment in enumerate(self.items):
-                segment.queue_card(self.position_queue[index*self.frames_per_segment])
-            # remove unnecessary positions at the end of the list:
-            self.position_queue.pop()
-            # food/growth handling:
-            for food in self.game_handle.foods.items:
-                if self.Head.collides_with(food):
-                    self.eat(food)
+
+        if self.is_alive:
+            for i in range(self.boost_multiplier):  # do this part as many times as the multiplier
+
+                # move head:
+                self.Head.translate_forward(self.speed)
+
+                # add head position to stream of positions for the body to follow:
+                self.push_head_position()
+
+                # different segments access different positions in the stream of positions:
+                for index, segment in enumerate(self.items):
+                    segment.queue_card(self.position_queue[index*self.frames_per_segment])
+
+                # remove unnecessary positions at the end of the list:
+                self.position_queue.pop()
+
+                # food/growth handling:
+                for food in self.game_handle.foods.items:
+                    if self.Head.collides_with(food):
+                        self.eat(food)
+                # death handling:
+                for segment in self.items[6:]:
+                    if self.Head.collides_with(segment):
+                        self.die()
+        else:
+            self.die()
+
         super().update()
 
     def push_head_position(self):
@@ -79,6 +98,11 @@ class Snake(Fleet):
         for i in range(self.frames_per_segment):
             self.position_queue.append(self.items[-1].get_tricoordinates())
 
+    def die(self):
+        self.is_alive = False
+        if len(self.items) > 0:
+            self.remove(self.items[-1])
+
 
 class FoodCluster(Fleet):
 
@@ -88,5 +112,5 @@ class FoodCluster(Fleet):
             self.append(Food(game_handle))
 
     def remove_into_belly(self, food_bit):
-        self.items.remove(food_bit)
+        self.remove(food_bit)
         self.append(Food(self.game_handle))  # add another food to screen

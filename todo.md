@@ -11,10 +11,10 @@
         stream as the head at different 
         points in time
 ---
-#### getting there
+#### getting there ✓
 * add mechanism for segment growth & food ✓
 * apply collisions of food to head (eating) ✓
-* apply collisions against self (death)
+* apply collisions against self (death) ✓
 ---
 #### fun gameplay
 * add collisions with edge of screen or 
@@ -25,7 +25,7 @@
     system
 ---
 #### pretty game
-* add a death animation
+* add a death animation ✓
 * differentiate head and tail sprites
 * beautify
 ---

@@ -56,7 +56,8 @@ class Game:
 
             # inputs
             key = pg.key.get_pressed()
-            self.control(self.snake, key)
+            if self.snake.is_alive:
+                self.control(self.snake, key)
 
             # updates
             self.snake.update()
