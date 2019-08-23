@@ -1,12 +1,20 @@
 # Ana the Anaconda
 
-A Snake game, only <b>BETTER</b>... with the added 
-ability to rotate in any direction!
+A graphical snake game coded in Python, in 
+which the player can rotate the snake in any
+direction. I coded the game engine myself 
+using the PyGame library; for the game engine
+itself I created a physics engine with the 
+capability to simulate the motion of particles
+in 2D using classical kinematics.
 
-Development stages (design doc): [todo file][todo]
+Currently in development.
 
-I'm basing this off of my game engine built with PyGame 
-(see [YeahToast!][YeahToast repository]).
+Development stages (design doc): 
+[todo file][todo]
+
+For a demo of the game engine, see 
+[YeahToast!][YeahToast repository].
 
 [todo]:
 todo.md
