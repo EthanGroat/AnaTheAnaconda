@@ -70,22 +70,6 @@ class Item:
             return False
 
 
-class Segment(Item):
-
-    def __init__(self, game_handle, color=green, tricoordinates=(0, 0, 0), width=26):
-        super().__init__(game_handle, sprite=None,
-                         coordinates=(tricoordinates[0], tricoordinates[1]),
-                         width=width, color=color)
-        self.rotate(tricoordinates[2])
-
-    def get_tricoordinates(self):
-        return self.center[0], self.center[1], self.rotation
-
-    def queue_card(self, tricoordinates=(0, 0, 0)):  # third coordinate is rotation
-        self.teleport(tricoordinates[0], tricoordinates[1], reset_rotation=True)
-        self.rotate(tricoordinates[2])
-
-
 class AcceleratingItem(Item):
 
     def __init__(self, game_handle, sprite=None, coordinates=(0, 0), width=250.0, velocity=(0.0, 0.0), womega=0.0):
@@ -157,46 +141,38 @@ class AcceleratingItem(Item):
             print(self.omega)
 
 
-class Food(AcceleratingItem):
+class NewtonianItem(AcceleratingItem):
 
-    def __init__(self, game_handle):
-        super().__init__(game_handle, sprite="resources/bluefood.png", width=9)
-        # rand = random()
-        self.teleport(randint(0, game_handle.display_width), randint(0, game_handle.display_height))
+    def __init__(self, game_handle, sprite=None, coordinates=(0, 0), width=250.0,
+                 mass=1.0, velocity=(0.0, 0.0), womega=0.0):
+        self.mass = mass
+        self.netForces = [0.0, 0.0]
+        super().__init__(game_handle, sprite, coordinates, width, velocity, womega)
 
+    def set_net_forces(self, net_x, net_y):  # takes coordinate floats and puts them in the Force vector
+        self.netForces = [net_x, net_y]
 
-# class NewtonianItem(AcceleratingItem):
-#
-#     def __init__(self, game_handle, sprite=None, coordinates=(0, 0), width=250.0,
-#                  mass=1.0, velocity=(0.0, 0.0), womega=0.0):
-#         self.mass = mass
-#         self.netForces = [0.0, 0.0]
-#         super().__init__(game_handle, sprite, coordinates, width, velocity, womega)
-#
-#     def set_net_forces(self, net_x, net_y):  # takes coordinate floats and puts them in the Force vector
-#         self.netForces = [net_x, net_y]
-#
-#     def apply_force(self, x, y):  # adds to netForces
-#         self.netForces[0] += x
-#         self.netForces[1] += y
-#
-#     def set_mass(self, mass):
-#         self.mass = mass
-#
-#     def accelerate(self, x_extra=0.0, y_extra=0.0, angular_acceleration=0.0):  # computes using forces and mass
-#         self.velocity[0] += x_extra + self.netForces[0]/self.mass
-#         self.velocity[1] += y_extra + self.netForces[1]/self.mass
-#         self.omega += angular_acceleration
-#
-#     # this is the class where update() becomes really important
-#     def update(self, x_force=0.0, y_force=0.0, angular_acc=0.0):
-#         # takes the x and y components of an applied force as arguments
-#         # (optional as update() can be called after any number of calls of apply_force() in the game loop)
-#         self.apply_force(x_force, y_force)
-#         self.accelerate()
-#         if self.game_handle.mode:
-#             if self.game_handle.mode['move'] == 'translate':
-#                 self.reset_velocity()
-#                 # print('It worked!')
-#         self.translate()
-#         self.set_net_forces(0.0, 0.0)
+    def apply_force(self, x, y):  # adds to netForces
+        self.netForces[0] += x
+        self.netForces[1] += y
+
+    def set_mass(self, mass):
+        self.mass = mass
+
+    def accelerate(self, x_extra=0.0, y_extra=0.0, angular_acceleration=0.0):  # computes using forces and mass
+        self.velocity[0] += x_extra + self.netForces[0]/self.mass
+        self.velocity[1] += y_extra + self.netForces[1]/self.mass
+        self.omega += angular_acceleration
+
+    # this is the class where update() becomes really important
+    def update(self, x_force=0.0, y_force=0.0, angular_acc=0.0):
+        # takes the x and y components of an applied force as arguments
+        # (optional as update() can be called after any number of calls of apply_force() in the game loop)
+        self.apply_force(x_force, y_force)
+        self.accelerate()
+        if self.game_handle.mode:
+            if self.game_handle.mode['move'] == 'translate':
+                self.reset_velocity()
+                # print('It worked!')
+        self.translate()
+        self.set_net_forces(0.0, 0.0)
